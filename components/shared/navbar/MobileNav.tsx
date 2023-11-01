@@ -10,11 +10,42 @@ import Image from 'next/image'
 import { IoMdMenu } from 'react-icons/io'
 
 import { Button } from '@/components/ui/button'
+import { sidebarLinks } from '@/constants'
 import { SignedOut } from '@clerk/nextjs'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import CustomIcon from '../CustomIcon'
 
 const NavContent = () => {
-  return <h1>NavContent</h1>
+  const pathname = usePathname()
+  return (
+    <div className="flex flex-1 flex-col gap-6">
+      {sidebarLinks.map((item) => {
+        const isActive =
+          (pathname.includes(item.route) && item.route.length > 1) ||
+          item.route === pathname
+        return (
+          <Link
+            href={item.route}
+            key={item.route}
+            className="flex items-center gap-4 dark:text-light-800 font-bold p-3 rounded-md hover:bg-slate-300 transition-all duration-200 dark:hover:bg-primary-500"
+          >
+            <CustomIcon
+              icon={item.icon}
+              className="text-dark-300 dark:text-light-800 pr-3 h-9 w-9"
+            />
+            <p
+              className={`${
+                isActive ? 'base-bold' : 'base-medium'
+              } hidden md:block dark:text-light-800`}
+            >
+              {item.label}
+            </p>
+          </Link>
+        )
+      })}
+    </div>
+  )
 }
 
 const MobileNav = () => {
@@ -23,9 +54,9 @@ const MobileNav = () => {
     <Sheet>
       <SheetTrigger asChild>
         <IoMdMenu
-          color={`${mode === 'dark' ? '#ff7700' : '#222'}`}
+          // color={`${mode === 'dark' ? '#ff7700' : '#222'}`}
           size={23}
-          className="sm:hidden"
+          className="sm:hidden text-black/80 dark:text-orange-500"
         />
       </SheetTrigger>
       <SheetContent
